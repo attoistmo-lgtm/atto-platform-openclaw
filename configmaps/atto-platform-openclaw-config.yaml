@@ -24,18 +24,8 @@ data:
           "workspace": "/workspace"
         }
       },
-      "models": {
-        "providers": {
-          "openai": {
-            "apiKey": "${LITELLM_API_KEY}",
-            "baseURL": "http://atto-platform-litellm-gateway.litellm-system.svc.cluster.local:4000/v1"
-          }
-        }
-      },
       "channels": {},
       "env": {
-        "LITELLM_API_KEY": "${LITELLM_API_KEY}",
-        "OPENCLAW_MASTER_KEY": "${OPENCLAW_MASTER_KEY}",
-        "REDIS_PASSWORD": "${REDIS_PASSWORD}"
+        "OPENCLAW_MASTER_KEY": "${OPENCLAW_MASTER_KEY}"
       }
     }
