@@ -8,6 +8,7 @@ data:
     {
       "gateway": {
         "port": 3000,
+        "mode": "local",
         "webchat": {
           "enabled": true,
           "port": 3001
