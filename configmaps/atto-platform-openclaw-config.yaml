@@ -7,41 +7,55 @@ data:
   openclaw.json: |
     {
       "gateway": {
-        "port": 3000,
         "mode": "local",
+        "port": 3000,
         "webchat": {
           "enabled": true,
           "port": 3001
         }
       },
-      "llm": {
-        "provider": "openai-compatible",
-        "baseUrl": "http://atto-platform-litellm-gateway.litellm-system.svc.cluster.local:4000/v1",
-        "model": "gpt-4o-mini"
+      "agents": {
+        "defaults": {
+          "workspace": "/workspace",
+          "model": {
+            "primary": "openai/gpt-4o-mini"
+          }
+        }
+      },
+      "models": {
+        "providers": {
+          "openai": {
+            "apiKey": "${LITELLM_API_KEY}",
+            "baseURL": "http://atto-platform-litellm-gateway.litellm-system.svc.cluster.local:4000/v1"
+          }
+        }
       },
       "channels": {
         "telegram": {
           "enabled": false,
-          "token": "${TELEGRAM_BOT_TOKEN}"
+          "botToken": "${TELEGRAM_BOT_TOKEN}",
+          "dmPolicy": "pairing"
         },
         "discord": {
           "enabled": false,
-          "token": "${DISCORD_BOT_TOKEN}"
+          "token": "${DISCORD_BOT_TOKEN}",
+          "dmPolicy": "pairing"
         },
         "slack": {
           "enabled": false,
-          "token": "${SLACK_BOT_TOKEN}"
+          "token": "${SLACK_BOT_TOKEN}",
+          "dmPolicy": "pairing"
         },
         "whatsapp": {
           "enabled": false,
-          "token": "${WHATSAPP_TOKEN}"
+          "token": "${WHATSAPP_TOKEN}",
+          "dmPolicy": "pairing"
         }
       },
       "memory": {
         "type": "filesystem",
         "path": "/workspace/memory"
       },
-      "workspace": "/workspace",
       "redis": {
         "enabled": true,
         "host": "atto-platform-redis-master.redis-system.svc.cluster.local",
