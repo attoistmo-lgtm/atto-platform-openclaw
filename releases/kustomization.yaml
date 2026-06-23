@@ -1,0 +1,9 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - atto-platform-openclaw-statefulset.yaml
+  - atto-platform-openclaw-service.yaml
+  - atto-platform-openclaw-pdb.yaml
+  - atto-platform-openclaw-ingress.yaml
+  # ServiceMonitor — DISABLED until monitoring.coreos.com CRDs are confirmed via atto-platform-prometheus
+  # - atto-platform-openclaw-servicemonitor.yaml

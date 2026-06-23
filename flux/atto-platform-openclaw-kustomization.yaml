@@ -1,0 +1,30 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: atto-platform-openclaw
+  namespace: flux-system
+spec:
+  interval: 10m
+  wait: true
+  timeout: 25m
+  dependsOn:
+    - name: atto-infra-base
+    - name: atto-platform-longhorn
+    - name: atto-platform-redis
+    - name: atto-platform-cnpg
+    - name: atto-platform-kong
+    - name: atto-platform-keycloak
+  path: ./main
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: atto-platform-openclaw
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-gpg-github
+  healthChecks:
+    - apiVersion: apps/v1
+      kind: StatefulSet
+      name: atto-platform-openclaw
+      namespace: openclaw-system

@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: atto-platform-default-limits
+  namespace: openclaw-system
+spec:
+  limits:
+    - type: Container
+      defaultRequest:
+        cpu: 50m
+        memory: 128Mi
+      default:
+        cpu: "2"
+        memory: "4Gi"
+      max:
+        cpu: "4"
+        memory: 8Gi
+      min:
+        cpu: 25m
+        memory: 64Mi

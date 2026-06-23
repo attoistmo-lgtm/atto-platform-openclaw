@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: openclaw-gateway
+  namespace: openclaw-system
+  labels:
+    app.kubernetes.io/name: openclaw
+    app.kubernetes.io/instance: atto-platform-openclaw
+spec:
+  type: ClusterIP
+  ports:
+    - name: gateway-ws
+      port: 3000
+      targetPort: 3000
+      protocol: TCP
+    - name: webchat
+      port: 3001
+      targetPort: 3001
+      protocol: TCP
+  selector:
+    app: openclaw-gateway

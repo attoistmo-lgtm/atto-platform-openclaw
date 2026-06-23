@@ -1,0 +1,6 @@
+# ATTOInfrastructure/.sops.yaml
+creation_rules:
+  - path_regex: secrets/.*\.enc\.yaml$
+    encrypted_regex: '^(data|stringData)$'
+    pgp: >-
+      A5E668673C8EF04923F3C5D393C5E493A04CA671

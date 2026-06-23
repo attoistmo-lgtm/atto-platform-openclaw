@@ -1,0 +1,31 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: atto-platform-openclaw
+  namespace: openclaw-system
+  annotations:
+    konghq.com/strip-path: "false"
+    konghq.com/plugins: "openclaw-oidc"
+  labels:
+    app.kubernetes.io/name: openclaw
+    app.kubernetes.io/instance: atto-platform-openclaw
+spec:
+  ingressClassName: kong
+  rules:
+    - host: openclaw.attoistmo.com.mx
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: openclaw-gateway
+                port:
+                  number: 3001
+          - path: /ws
+            pathType: Prefix
+            backend:
+              service:
+                name: openclaw-gateway
+                port:
+                  number: 3000

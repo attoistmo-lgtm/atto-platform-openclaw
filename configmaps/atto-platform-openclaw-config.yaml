@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: atto-platform-openclaw-config
+  namespace: openclaw-system
+data:
+  openclaw.json: |
+    {
+      "gateway": {
+        "port": 3000,
+        "webchat": {
+          "enabled": true,
+          "port": 3001
+        }
+      },
+      "llm": {
+        "provider": "openai-compatible",
+        "baseUrl": "http://atto-platform-litellm-gateway.litellm-system.svc.cluster.local:4000/v1",
+        "model": "gpt-4o-mini"
+      },
+      "channels": {
+        "telegram": {
+          "enabled": false,
+          "token": "${TELEGRAM_BOT_TOKEN}"
+        },
+        "discord": {
+          "enabled": false,
+          "token": "${DISCORD_BOT_TOKEN}"
+        },
+        "slack": {
+          "enabled": false,
+          "token": "${SLACK_BOT_TOKEN}"
+        },
+        "whatsapp": {
+          "enabled": false,
+          "token": "${WHATSAPP_TOKEN}"
+        }
+      },
+      "memory": {
+        "type": "filesystem",
+        "path": "/workspace/memory"
+      },
+      "workspace": "/workspace",
+      "redis": {
+        "enabled": true,
+        "host": "atto-platform-redis-master.redis-system.svc.cluster.local",
+        "port": 6379,
+        "password": "${REDIS_PASSWORD}"
+      }
+    }

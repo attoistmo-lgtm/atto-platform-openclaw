@@ -1,0 +1,13 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: atto-platform-openclaw
+  namespace: openclaw-system
+  labels:
+    app.kubernetes.io/name: openclaw
+    app.kubernetes.io/instance: atto-platform-openclaw
+spec:
+  maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: openclaw-gateway

@@ -1,0 +1,21 @@
+# OpenClaw workspace
+/workspace/*
+!/workspace/.gitkeep
+
+# Logs
+*.log
+logs/
+
+# Local config overrides
+.openclaw.local.json
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# SOPS encrypted files (unencrypted versions)
+!*.enc.yaml

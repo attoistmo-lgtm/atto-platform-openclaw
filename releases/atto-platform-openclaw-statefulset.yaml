@@ -1,0 +1,128 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: atto-platform-openclaw
+  namespace: openclaw-system
+  labels:
+    app.kubernetes.io/name: openclaw
+    app.kubernetes.io/instance: atto-platform-openclaw
+    app.kubernetes.io/part-of: atto-platform
+spec:
+  serviceName: openclaw-gateway
+  replicas: 1
+  selector:
+    matchLabels:
+      app: openclaw-gateway
+  updateStrategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: openclaw-gateway
+        app.kubernetes.io/name: openclaw
+        app.kubernetes.io/instance: atto-platform-openclaw
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      containers:
+        - name: openclaw
+          image: ghcr.io/attoistmo-lgtm/atto-platform-openclaw:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: gateway-ws
+              containerPort: 3000
+              protocol: TCP
+            - name: webchat
+              containerPort: 3001
+              protocol: TCP
+          env:
+            - name: OPENCLAW_CONFIG_PATH
+              value: /etc/openclaw/openclaw.json
+            - name: OPENCLAW_WORKSPACE_PATH
+              value: /workspace
+            - name: OPENCLAW_MASTER_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: atto-platform-openclaw-secrets
+                  key: OPENCLAW_MASTER_KEY
+            - name: LITELLM_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: atto-platform-openclaw-secrets
+                  key: LITELLM_API_KEY
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: atto-platform-openclaw-secrets
+                  key: REDIS_PASSWORD
+            - name: TELEGRAM_BOT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: atto-platform-openclaw-secrets
+                  key: TELEGRAM_BOT_TOKEN
+            - name: DISCORD_BOT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: atto-platform-openclaw-secrets
+                  key: DISCORD_BOT_TOKEN
+            - name: SLACK_BOT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: atto-platform-openclaw-secrets
+                  key: SLACK_BOT_TOKEN
+            - name: WHATSAPP_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: atto-platform-openclaw-secrets
+                  key: WHATSAPP_TOKEN
+          volumeMounts:
+            - name: config
+              mountPath: /etc/openclaw
+              readOnly: true
+            - name: workspace
+              mountPath: /workspace
+          resources:
+            requests:
+              cpu: "2"
+              memory: "4Gi"
+            limits:
+              cpu: "4"
+              memory: "8Gi"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            timeoutSeconds: 10
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+      volumes:
+        - name: config
+          configMap:
+            name: atto-platform-openclaw-config
+  volumeClaimTemplates:
+    - metadata:
+        name: workspace
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        storageClassName: longhorn-fast
+        resources:
+          requests:
+            storage: 10Gi

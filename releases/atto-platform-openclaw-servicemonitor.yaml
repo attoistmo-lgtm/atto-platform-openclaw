@@ -1,0 +1,20 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: atto-platform-openclaw
+  namespace: openclaw-system
+  labels:
+    app.kubernetes.io/name: openclaw
+    app.kubernetes.io/instance: atto-platform-openclaw
+spec:
+  selector:
+    matchLabels:
+      app: openclaw-gateway
+  endpoints:
+    - port: webchat
+      path: /metrics
+      interval: 30s
+      scrapeTimeout: 10s
+  namespaceSelector:
+    matchNames:
+      - openclaw-system
